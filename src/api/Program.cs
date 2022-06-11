@@ -1,7 +1,7 @@
 using System.Net;
 using Microsoft.OpenApi.Models;
-using Npgsql;
 using pet;
+using pet.Repositories;
 using Serilog;
 using Serilog.Events;
 
@@ -17,7 +17,6 @@ try
 
     Log.Information($"Starting up {appName}...");
     Log.Information("Logging Initialised...");
-    Log.Information($"Database Connection: {CreateDBConnectionString()}");
 
     builder.WebHost.ConfigureKestrel(serverOptions =>
     {
@@ -47,10 +46,14 @@ try
     // Add AWS Services here
 
     // Add Dependencies, ideally via modules to avoid this file becoming too large
-    builder.Services.AddScoped<IPetRepository, PetRepository>();
-    builder.Services.AddScoped<IUserRepository, UserRepository>();
     builder.Services.AddScoped<IPetService, PetService>();
     builder.Services.AddScoped<IUserService, UserService>();
+
+    // Repo
+    builder.Services.AddScoped<IDbConnectionFactory, DbConnectionFactory>();
+    builder.Services.AddScoped<IQuery, DapperQuery>();
+    builder.Services.AddScoped<IPetRepository, PetRepository>();
+    builder.Services.AddScoped<IUserRepository, UserRepository>();
 
     // Build the app
     var app = builder.Build();
@@ -100,22 +103,4 @@ static LoggerConfiguration CreateLoggerConfig(string appName)
         .WriteTo.Console();
 
     return loggerConfiguration;
-}
-
-static string CreateDBConnectionString()
-{
-    var databaseUrl = Environment.GetEnvironmentVariable("DATABASE_URL");
-    var databaseUri = new Uri(databaseUrl);
-    var userInfo = databaseUri.UserInfo.Split(':');
-
-    var builder = new NpgsqlConnectionStringBuilder
-    {
-        Host = databaseUri.Host,
-        Port = databaseUri.Port,
-        Username = userInfo[0],
-        Password = userInfo[1],
-        Database = databaseUri.LocalPath.TrimStart('/')
-    };
-
-    return builder.ToString();
 }
