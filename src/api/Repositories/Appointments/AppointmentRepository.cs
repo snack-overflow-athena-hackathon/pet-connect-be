@@ -12,6 +12,13 @@ public class AppointmentRepository : IAppointmentRepository
         _query = query;
     }
 
+    public async Task<IEnumerable<Appointment>> GetAppointmentsNew()
+    {
+        var sqlStatement = GetAppointmentsSqlStatement();
+        var results = await _query.QueryAsync<Appointment>(sqlStatement);
+        return results;
+    }
+
     public async Task<IEnumerable<Appointment>> GetAppointments()
     {
         var returnedAppointments = new List<Appointment>
@@ -52,5 +59,10 @@ public class AppointmentRepository : IAppointmentRepository
         };
         
         return returnedAppointments;
+    }
+
+    private static string GetAppointmentsSqlStatement()
+    {
+        return $@"SELECT Id, DateTime, OwnerId, VisitorId, PetId, LocationId, Cancelled, Attended FROM Appointments";
     }
 }
