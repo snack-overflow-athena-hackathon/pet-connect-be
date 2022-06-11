@@ -32,7 +32,8 @@ namespace pet.Repositories
                 Port = 5432,
                 Username = user,
                 Password = pass,
-                Database = db
+                Database = db,
+                Pooling = false
             };
 
             return builder.ToString();

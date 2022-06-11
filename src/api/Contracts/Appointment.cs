@@ -8,6 +8,5 @@ public class Appointment
     public long VisitorId { get; set; }
     public long PetId { get; set; }
     public long LocationId { get; set; }
-    public bool Cancelled { get; set; }
-    public bool Attended { get; set; }
+    public long AppointmentState { get; set; }
 }

@@ -20,6 +20,6 @@ public class AppointmentRepository : IAppointmentRepository
 
     private static string GetAllAppointmentsSqlStatement()
     {
-        return $@"SELECT Id, AppointmentDateTimeUTC, OwnerId, VisitorId, PetId, LocationId, Cancelled, Attended FROM Appointments";
+        return $@"SELECT Id, AppointmentDateTimeUTC, OwnerId, VisitorId, PetId, LocationId, AppointmentState FROM Appointments";
     }
 }
