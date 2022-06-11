@@ -26,14 +26,14 @@ namespace Api.Controllers
         }
 
         [HttpGet]
-        [Route("/ByUserId/{userId}")]
+        [Route("ByUserId/{userId}")]
         public async Task<ActionResult> GetPetsByUserId(long userId)
         {
             return null;
         }
         
         [HttpGet]
-        [Route("/ByPetId/{petId}")]
+        [Route("ByPetId/{petId}")]
         public async Task<ActionResult> GetPetByPetId(long petId)
         {
             var returnedPet = await _petService.GetPet(petId);
