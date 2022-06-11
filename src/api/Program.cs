@@ -2,6 +2,7 @@ using System.Net;
 using Microsoft.OpenApi.Models;
 using Serilog;
 using Serilog.Events;
+using npgsql;
 
 try
 {
@@ -93,4 +94,22 @@ static LoggerConfiguration CreateLoggerConfig(string appName)
         .WriteTo.Console();
 
     return loggerConfiguration;
+}
+
+static string CreateDBConnectionString()
+{
+    var databaseUrl = Environment.GetEnvironmentVariable("DATABASE_URL");
+    var databaseUri = new Uri(databaseUrl);
+    var userInfo = databaseUri.UserInfo.Split(':');
+
+    var builder = new NpgsqlConnectionStringBuilder
+    {
+        Host = databaseUri.Host,
+        Port = databaseUri.Port,
+        Username = userInfo[0],
+        Password = userInfo[1],
+        Database = databaseUri.LocalPath.TrimStart('/')
+    };
+
+    return builder.ToString();
 }
