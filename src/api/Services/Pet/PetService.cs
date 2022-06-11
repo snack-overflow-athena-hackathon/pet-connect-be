@@ -19,8 +19,13 @@ public class PetService : IPetService
         return await _petRepository.GetPetByPetId(petId);
     }
 
-    public async Task<Pet> GetPetByUserId(long userId)
+    public async Task<IEnumerable<Pet>> GetPetsByUserId(long userId)
     {
-        return await _petRepository.GetPetByUserId(userId);
+        return await _petRepository.GetPetsByUserId(userId);
+    }
+
+    public async Task<long> AddPet(Pet pet)
+    {
+        return await _petRepository.AddPet(pet);
     }
 }

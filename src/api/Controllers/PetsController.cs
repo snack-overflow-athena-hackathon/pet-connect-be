@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Infrastructure;
 using pet;
 
 namespace Api.Controllers
@@ -18,6 +17,8 @@ namespace Api.Controllers
         }
 
         [HttpGet]
+        [ProducesResponseType(typeof(IEnumerable<Pet>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(string), StatusCodes.Status400BadRequest)]
         public async Task<ActionResult> GetPets()
         {
             try
@@ -30,17 +31,19 @@ namespace Api.Controllers
                 Console.WriteLine(e);
                 return BadRequest(e);
             }
-
         }
 
-        [HttpGet]
-        [Route("ByUserId/{userId}")]
-        public async Task<ActionResult> GetPetsByUserId(long userId)
+        [HttpPost]
+        [ProducesResponseType(typeof(Pet), StatusCodes.Status201Created)]
+        [ProducesResponseType(typeof(string), StatusCodes.Status400BadRequest)]
+        public async Task<ActionResult> CreatePet([FromBody] Pet pet)
         {
             try
             {
-                var returnedPet = await _petService.GetPetByUserId(userId);
-                return Ok(returnedPet);
+                var id = await _petService.AddPet(pet);
+                pet.Id = id;
+
+                return Created($"ByPetId/{id}", pet);
             }
             catch (Exception e)
             {
@@ -48,9 +51,11 @@ namespace Api.Controllers
                 return BadRequest(e);
             }
         }
-        
+
         [HttpGet]
-        [Route("ByPetId/{petId}")]
+        [ProducesResponseType(typeof(Pet), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(string), StatusCodes.Status400BadRequest)]
+        [Route("{petId}")]
         public async Task<ActionResult> GetPetByPetId(long petId)
         {
             try
@@ -64,7 +69,23 @@ namespace Api.Controllers
                 return BadRequest(e);
             }
         }
-        
-        
+
+        [HttpGet]
+        [ProducesResponseType(typeof(IEnumerable<Pet>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(string), StatusCodes.Status400BadRequest)]
+        [Route("User/{userId}")]
+        public async Task<ActionResult> GetPetsByUserId(long userId)
+        {
+            try
+            {
+                var returnedPets = await _petService.GetPetsByUserId(userId);
+                return Ok(returnedPets);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                return BadRequest(e);
+            }
+        }
     }
 }
