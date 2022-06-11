@@ -13,4 +13,9 @@ public class PetService : IPetService
     {
         return await _petRepository.GetPets();
     }
+    
+    public async Task<Pet> GetPet(long petId)
+    {
+        return await _petRepository.GetPet(petId);
+    }
 }
