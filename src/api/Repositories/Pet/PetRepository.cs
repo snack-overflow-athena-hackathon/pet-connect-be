@@ -46,7 +46,7 @@ public class PetRepository : IPetRepository
             OwnerId = userId,
             TypeId = 1,
             Breed = "Doberman",
-            Name = "Max",
+            PetName = "Max",
             Bio = "Max is nice.",
             PictureUrl = "https://www.akc.org/wp-content/uploads/2017/11/Doberman-Pinscher-standing-outdoors.jpg",
             ListOrder = 0
