@@ -24,4 +24,13 @@ public class AppointmentService : IAppointmentService
         return await _appointmentRepository.GetAppointmentById(appointmentId);
     }
 
+    public async Task<long> AddAppointment(Appointment appointment)
+    {
+        return await _appointmentRepository.AddAppointment(appointment);
+    }
+
+    public async Task EditAppointment(Appointment appointment)
+    {
+        await _appointmentRepository.EditAppointment(appointment);
+    }
 }

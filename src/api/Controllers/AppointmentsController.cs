@@ -64,12 +64,48 @@ namespace Api.Controllers
         [ProducesResponseType(typeof(string), StatusCodes.Status404NotFound)]
         [ProducesResponseType(typeof(string), StatusCodes.Status400BadRequest)]
         [Route("User/{userId:long}")]
-        public async Task<ActionResult> GetAppointmentByUserId(long userId)
+        public async Task<ActionResult> GetAppointmentsByUserId(long userId)
         {
             try
             {
-                var appointment = await _appointmentService.GetAppointmentsByUserId(userId);
-                return Ok(appointment);
+                var appointments = await _appointmentService.GetAppointmentsByUserId(userId);
+                return Ok(appointments);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                return BadRequest(e);
+            }
+        }
+
+        [HttpPost]
+        [ProducesResponseType(typeof(Appointment), StatusCodes.Status201Created)]
+        [ProducesResponseType(typeof(string), StatusCodes.Status400BadRequest)]
+        public async Task<ActionResult> AddAppointment([FromBody] Appointment appointment)
+        {
+            try
+            {
+                var id = await _appointmentService.AddAppointment(appointment);
+                appointment.Id = id;
+
+                return Created($"{id}", appointment);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                return BadRequest(e);
+            }
+        }
+
+        [HttpPut]
+        [ProducesResponseType(typeof(string), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(string), StatusCodes.Status400BadRequest)]
+        public async Task<ActionResult> EditAppointment([FromBody] Appointment appointment)
+        {
+            try
+            {
+                await _appointmentService.EditAppointment(appointment);
+                return Ok();
             }
             catch (Exception e)
             {
