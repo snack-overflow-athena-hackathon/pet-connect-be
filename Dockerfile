@@ -16,7 +16,5 @@ FROM mcr.microsoft.com/dotnet/aspnet:6.0-focal AS runtime
 
 WORKDIR /app
 COPY --from=build /build /app
-
-ENV TZ=Europe/London
-
-ENTRYPOINT ["dotnet", "pet-api-athena.dll"]
+EXPOSE 80
+CMD ["dotnet", "pet-api-athena.dll"]
