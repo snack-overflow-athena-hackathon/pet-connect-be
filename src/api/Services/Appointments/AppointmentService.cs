@@ -15,4 +15,9 @@ public class AppointmentService : IAppointmentService
     {
         return await _appointmentRepository.GetAppointments();
     }
+
+    public async Task<IEnumerable<Appointment>> GetAppointmentsByUserId(long userId)
+    {
+        return await _appointmentRepository.GetAppointmentsByUserId();
+    }
 }

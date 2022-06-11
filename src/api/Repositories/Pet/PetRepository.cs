@@ -23,7 +23,7 @@ public class PetRepository : IPetRepository
     }
 
 
-    public async Task<Pet> GetPet(long petId)
+    public async Task<Pet> GetPetByPetId(long petId)
     {
         return new Pet
         {
@@ -32,6 +32,21 @@ public class PetRepository : IPetRepository
             TypeId = 1,
             Breed = "Doberman",
             PetName = "Max",
+            Bio = "Max is nice.",
+            PictureUrl = "https://www.akc.org/wp-content/uploads/2017/11/Doberman-Pinscher-standing-outdoors.jpg",
+            ListOrder = 0
+        };
+    }
+
+    public async Task<Pet> GetPetByUserId(long userId)
+    {
+        return new Pet
+        {
+            Id = 123,
+            OwnerId = userId,
+            TypeId = 1,
+            Breed = "Doberman",
+            Name = "Max",
             Bio = "Max is nice.",
             PictureUrl = "https://www.akc.org/wp-content/uploads/2017/11/Doberman-Pinscher-standing-outdoors.jpg",
             ListOrder = 0
