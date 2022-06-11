@@ -2,24 +2,12 @@ namespace pet;
 
 public class Pet
 {
-    private long Id { get; set; }
-    private long OwnerId { get; set; }
-    private long TypeId { get; set; }
-    private string Breed { get; set; }
-    private string Name { get; set; }
-    private string Bio { get; set; }
-    private string PictureUrl { get; set; }
-    private int ListOrder { get; set; }
-
-    public Pet(long id, long ownerId, long typeId, string breed, string name, string bio, string pictureUrl, int listOrder)
-    {
-        Id = id;
-        OwnerId = ownerId;
-        TypeId = typeId;
-        Breed = breed;
-        Name = name;
-        Bio = bio;
-        PictureUrl = pictureUrl;
-        ListOrder = listOrder;
-    }
+    public long Id { get; set; }
+    public long OwnerId { get; set; }
+    public long TypeId { get; set; }
+    public string Breed { get; set; }
+    public string Name { get; set; }
+    public string Bio { get; set; }
+    public string? PictureUrl { get; set; }
+    public int ListOrder { get; set; }
 }
