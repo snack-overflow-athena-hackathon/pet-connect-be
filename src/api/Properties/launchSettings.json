@@ -1,4 +1,4 @@
-﻿{
+{
   "$schema": "https://json.schemastore.org/launchsettings.json",
   "iisSettings": {
     "windowsAuthentication": false,
@@ -11,12 +11,11 @@
   "profiles": {
     "LocalProject-Api": {
       "commandName": "Project",
-      "dotnetRunMessages": true,
       "launchBrowser": true,
       "launchUrl": "swagger",
-      "applicationUrl": "https://localhost:7059;http://localhost:5108",
       "environmentVariables": {
-        "Port": "8080"
+        "Port": "8080",
+        "DATABASE_UIRL": "postgres:/yriinewdjazjjl:79be7dbbf6fd93fd1cd87b298d5b73405010bb295984e287dfd2fb899ef7aae2@ec2-52-48-159-67.eu-west-1.compute.amazonaws.com:5432/d124kjk89ie19l"
       }
     },
     "Docker": {

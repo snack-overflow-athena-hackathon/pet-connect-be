@@ -3,7 +3,7 @@ namespace pet;
 public class Appointment
 {
     public long Id { get; set; }
-    public string DateTime { get; set; }
+    public string AppointmentDateTimeUTC { get; set; }
     public long OwnerId { get; set; }
     public long VisitorId { get; set; }
     public long PetId { get; set; }

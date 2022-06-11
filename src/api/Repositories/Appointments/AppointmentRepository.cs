@@ -12,21 +12,21 @@ public class AppointmentRepository : IAppointmentRepository
         _query = query;
     }
 
-    public async Task<IEnumerable<Appointment>> GetAppointmentsNew()
+    public async Task<IEnumerable<Appointment>> GetAppointments()
     {
         var sqlStatement = GetAppointmentsSqlStatement();
         var results = await _query.QueryAsync<Appointment>(sqlStatement);
         return results;
     }
 
-    public async Task<IEnumerable<Appointment>> GetAppointments()
+    public async Task<IEnumerable<Appointment>> GetAppointmentsNew()
     {
         var returnedAppointments = new List<Appointment>
         {
             new Appointment
             {
                 Id = 1,
-                DateTime = "",
+                AppointmentDateTimeUTC = "",
                 OwnerId = 456,
                 VisitorId = 457,
                 PetId = 123,
@@ -37,7 +37,7 @@ public class AppointmentRepository : IAppointmentRepository
             new Appointment
             {
                 Id = 2,
-                DateTime = "",
+                AppointmentDateTimeUTC = "",
                 OwnerId = 456,
                 VisitorId = 457,
                 PetId = 2,
@@ -48,7 +48,7 @@ public class AppointmentRepository : IAppointmentRepository
             new Appointment
             {
                 Id = 3,
-                DateTime = "",
+                AppointmentDateTimeUTC = "",
                 OwnerId = 456,
                 VisitorId = 457,
                 PetId = 2,
@@ -63,6 +63,6 @@ public class AppointmentRepository : IAppointmentRepository
 
     private static string GetAppointmentsSqlStatement()
     {
-        return $@"SELECT Id, DateTime, OwnerId, VisitorId, PetId, LocationId, Cancelled, Attended FROM Appointments";
+        return $@"SELECT Id, AppointmentDateTimeUTC, OwnerId, VisitorId, PetId, LocationId, Cancelled, Attended FROM Appointments";
     }
 }
