@@ -17,11 +17,56 @@ namespace Api.Controllers
         }
 
         [HttpGet]
+        [ProducesResponseType(typeof(IEnumerable<User>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(string), StatusCodes.Status400BadRequest)]
         public async Task<ActionResult> GetUsers()
         {
-            var returnedUsers = await _userService.GetUsers();
-
-            return Ok(returnedUsers);
+            try
+            {
+                var returnedUsers = await _userService.GetUsers();
+                return Ok(returnedUsers);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                return BadRequest(e);
+            }
+        }
+        
+        [HttpGet]
+        [ProducesResponseType(typeof(User), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(string), StatusCodes.Status400BadRequest)]
+        [Route("{userId}")]
+        public async Task<ActionResult> GetUserByUserId(long userId)
+        {
+            try
+            {
+                var returnedUser = await _userService.GetUserByUserId(userId);
+                return Ok(returnedUser);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                return BadRequest(e);
+            }
+        }
+        
+        [HttpGet]
+        [ProducesResponseType(typeof(User), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(string), StatusCodes.Status400BadRequest)]
+        [Route("Pet/{petId}")]
+        public async Task<ActionResult> GetUserByPetId(long petId)
+        {
+            try
+            {
+                var returnedUser = await _userService.GetUserByPetId(petId);
+                return Ok(returnedUser);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                return BadRequest(e);
+            }
         }
     }
 }

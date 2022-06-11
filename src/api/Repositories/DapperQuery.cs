@@ -38,5 +38,11 @@ namespace pet.Repositories
             using var connection = _dbConnectionFactory.CreateConnection();
             return await connection.QueryAsync<T>(sql);
         }
+        
+        public async Task<T> QuerySingleAsync<T>(string sql)
+        {
+            using var connection = _dbConnectionFactory.CreateConnection();
+            return await connection.ExecuteScalarAsync<T>(sql);
+        }
     }
 }

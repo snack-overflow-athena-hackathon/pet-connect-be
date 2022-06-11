@@ -53,7 +53,7 @@ public class PetRepository : IPetRepository
         return new Pet
         {
             Id = petId,
-            OwnerId = 456,
+            OwnerId = 1,
             TypeId = 1,
             Breed = "Doberman",
             PetName = "Max",

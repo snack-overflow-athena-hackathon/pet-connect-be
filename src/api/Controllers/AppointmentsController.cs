@@ -17,6 +17,8 @@ namespace Api.Controllers
         }
 
         [HttpGet]
+        [ProducesResponseType(typeof(IEnumerable<Appointment>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(string), StatusCodes.Status400BadRequest)]
         public async Task<ActionResult> GetAppointments()
         {
             try
@@ -32,6 +34,8 @@ namespace Api.Controllers
         }
 
         [HttpGet]
+        [ProducesResponseType(typeof(Appointment), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(string), StatusCodes.Status400BadRequest)]
         [Route("{userId}")]
         public async Task<ActionResult> GetAppointmentsByUser(long userId)
         {
