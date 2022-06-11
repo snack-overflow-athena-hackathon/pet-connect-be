@@ -49,13 +49,13 @@ public class UserRepository : IUserRepository
 
     private static string GetAllUsersSqlStatement()
     {
-        return $@"SELECT Id, PetOwner, Gender, FirstName, LastName, Pronouns, PreferredName, Email, Bio, PictureUrl FROM Users";
+        return $@"SELECT Id, PetOwner, Gender, FirstName, LastName, Pronouns, PreferredName, Email, Bio, PictureUrl, Deactivated FROM Users";
     }
 
     private static string GetUserSqlStatement()
     {
         return $@"
-            SELECT Id, PetOwner, Gender, FirstName, LastName, Pronouns, PreferredName, Email, Bio, PictureUrl 
+            SELECT Id, PetOwner, Gender, FirstName, LastName, Pronouns, PreferredName, Email, Bio, PictureUrl, Deactivated
             FROM Users 
             WHERE Id = @UserId";
     }
@@ -84,7 +84,8 @@ public class UserRepository : IUserRepository
                     PreferredName = @PreferredName,
                     Email = @Email,
                     Bio = @Bio,
-                    PictureUrl = @PictureUrl
+                    PictureUrl = @PictureUrl,
+                    Deactivated = @Deactivated
                     WHERE Id = @Id";
     }
 }

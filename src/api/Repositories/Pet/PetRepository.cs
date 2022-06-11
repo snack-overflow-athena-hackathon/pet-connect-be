@@ -66,17 +66,17 @@ public class PetRepository : IPetRepository
 
     private static string GetAllPetsSqlStatement()
     {
-        return $@"SELECT Id, OwnerId, TypeId, Breed, PetName, Gender, Bio, PictureUrl, ListOrder FROM Pets";
+        return $@"SELECT Id, OwnerId, TypeId, Breed, PetName, Gender, Bio, PictureUrl, ListOrder, Deactivated FROM Pets";
     }
     private static string AddPetSqlStatement()
     {
         return $@"INSERT INTO Pets
                  (
-                   OwnerId, TypeId, Breed, PetName, Gender, Bio, PictureUrl, ListOrder
+                   OwnerId, TypeId, Breed, PetName, Gender, Bio, PictureUrl, ListOrder, Deactivated
                  )
                  VALUES
                  (
-                   @OwnerId, @TypeId, @Breed, @PetName, @Gender, @Bio, @PictureUrl, @ListOrder
+                   @OwnerId, @TypeId, @Breed, @PetName, @Gender, @Bio, @PictureUrl, @ListOrder, @Deactivated
                  ) RETURNING Id";
     }
     
@@ -91,14 +91,15 @@ public class PetRepository : IPetRepository
                     Gender = @Gender, 
                     Bio = @Bio, 
                     PictureUrl = @PictureUrl, 
-                    ListOrder = @ListOrder
+                    ListOrder = @ListOrder,
+                    Deactivated = @Deactivated
                     WHERE Id = @Id";
     }
     
     private static string GetPetSqlStatement()
     {
         return $@"
-                SELECT Id, OwnerId, TypeId, Breed, PetName, Gender, Bio, PictureUrl, ListOrder
+                SELECT Id, OwnerId, TypeId, Breed, PetName, Gender, Bio, PictureUrl, ListOrder, Deactivated
                 FROM Pets
                 WHERE Id = @Id";
     }
@@ -106,7 +107,7 @@ public class PetRepository : IPetRepository
     private static string GetPetsByOwnerIdSqlStatement()
     {
         return $@"
-                SELECT Id, OwnerId, TypeId, Breed, PetName, Gender, Bio, PictureUrl, ListOrder
+                SELECT Id, OwnerId, TypeId, Breed, PetName, Gender, Bio, PictureUrl, ListOrder, Deactivated
                 FROM Pets
                 WHERE OwnerId = @OwnerId";
     }

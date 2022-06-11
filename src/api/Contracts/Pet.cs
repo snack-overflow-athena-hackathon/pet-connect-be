@@ -11,4 +11,5 @@ public class Pet
     public string? Bio { get; set; }
     public string? PictureUrl { get; set; }
     public int ListOrder { get; set; }
+    public bool Deactivated { get; set; }
 }

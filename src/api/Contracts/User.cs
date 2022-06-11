@@ -12,4 +12,5 @@ public class User
     public string Email { get; set; }
     public string? Bio { get; set; }
     public string? PictureUrl { get; set; }
+    public bool Deactivated { get; set; }
 }
