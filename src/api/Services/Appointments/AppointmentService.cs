@@ -1,10 +1,8 @@
-using Microsoft.AspNetCore.Mvc;
-
 namespace pet;
 
 public class AppointmentService : IAppointmentService
 {
-    private IAppointmentRepository _appointmentRepository;
+    private readonly IAppointmentRepository _appointmentRepository;
 
     public AppointmentService(IAppointmentRepository appointmentRepository)
     {
@@ -18,6 +16,12 @@ public class AppointmentService : IAppointmentService
 
     public async Task<IEnumerable<Appointment>> GetAppointmentsByUserId(long userId)
     {
-        return await _appointmentRepository.GetAppointmentsByUserId();
+        return await _appointmentRepository.GetAppointmentsByUserId(userId);
     }
+
+    public async Task<Appointment> GetAppointmentById(long appointmentId)
+    {
+        return await _appointmentRepository.GetAppointmentById(appointmentId);
+    }
+
 }

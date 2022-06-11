@@ -56,7 +56,7 @@ namespace Api.Controllers
         [ProducesResponseType(typeof(Pet), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(string), StatusCodes.Status400BadRequest)]
         [Route("{petId}")]
-        public async Task<ActionResult> GetPetByPetId(long petId)
+        public async Task<ActionResult> GetPetById(long petId)
         {
             try
             {
