@@ -14,6 +14,7 @@ try
     Log.Logger = loggerConfig.CreateLogger();
 
     Log.Information($"Starting up {appName}...");
+    Log.Information("Logging Initialised...");
 
     builder.WebHost.ConfigureKestrel(serverOptions =>
     {
