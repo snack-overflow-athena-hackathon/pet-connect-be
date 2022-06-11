@@ -10,10 +10,12 @@ namespace Api.Controllers
     public class PetsController : ControllerBase
     {
         private readonly IPetService _petService;
+        private readonly IUserService _userService;
 
-        public PetsController(IPetService petService)
+        public PetsController(IPetService petService, IUserService userService)
         {
             _petService = petService;
+            _userService = userService;
         }
 
         [HttpGet]
@@ -71,15 +73,15 @@ namespace Api.Controllers
         }
 
         [HttpGet]
-        [ProducesResponseType(typeof(IEnumerable<Pet>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(User), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(string), StatusCodes.Status400BadRequest)]
-        [Route("User/{userId}")]
-        public async Task<ActionResult> GetPetsByUserId(long userId)
+        [Route("{petId}/User")]
+        public async Task<ActionResult> GetUserByPetId(long petId)
         {
             try
             {
-                var returnedPets = await _petService.GetPetsByUserId(userId);
-                return Ok(returnedPets);
+                var returnedUser = await _userService.GetUserByPetId(petId);
+                return Ok(returnedUser);
             }
             catch (Exception e)
             {
@@ -87,7 +89,7 @@ namespace Api.Controllers
                 return BadRequest(e);
             }
         }
-        
+
         [HttpPut]
         [ProducesResponseType(typeof(string), StatusCodes.Status400BadRequest)]
         public async Task<ActionResult> EditPet([FromBody] Pet pet)

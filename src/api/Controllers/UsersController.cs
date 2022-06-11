@@ -10,10 +10,14 @@ namespace Api.Controllers
     public class UsersController : ControllerBase
     {
         private readonly IUserService _userService;
+        private readonly IAppointmentService _appointmentService;
+        private readonly IPetService _petService;
 
-        public UsersController(IUserService userService)
+        public UsersController(IUserService userService, IAppointmentService appointmentService, IPetService petService)
         {
             _userService = userService;
+            _appointmentService = appointmentService;
+            _petService = petService;
         }
 
         [HttpGet]
@@ -52,15 +56,16 @@ namespace Api.Controllers
         }
         
         [HttpGet]
-        [ProducesResponseType(typeof(User), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(IEnumerable<Appointment>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(string), StatusCodes.Status404NotFound)]
         [ProducesResponseType(typeof(string), StatusCodes.Status400BadRequest)]
-        [Route("Pet/{petId}")]
-        public async Task<ActionResult> GetUserByPetId(long petId)
+        [Route("{userId:long}/Appointments")]
+        public async Task<ActionResult> GetAppointmentsByUserId(long userId)
         {
             try
             {
-                var returnedUser = await _userService.GetUserByPetId(petId);
-                return Ok(returnedUser);
+                var appointments = await _appointmentService.GetAppointmentsByUserId(userId);
+                return Ok(appointments);
             }
             catch (Exception e)
             {
@@ -68,7 +73,25 @@ namespace Api.Controllers
                 return BadRequest(e);
             }
         }
-        
+
+        [HttpGet]
+        [ProducesResponseType(typeof(IEnumerable<Pet>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(string), StatusCodes.Status400BadRequest)]
+        [Route("{userId:long}/Pets")]
+        public async Task<ActionResult> GetPetsByUserId(long userId)
+        {
+            try
+            {
+                var returnedPets = await _petService.GetPetsByUserId(userId);
+                return Ok(returnedPets);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                return BadRequest(e);
+            }
+        }
+
         [HttpPost]
         [ProducesResponseType(typeof(User), StatusCodes.Status201Created)]
         [ProducesResponseType(typeof(string), StatusCodes.Status400BadRequest)]
@@ -89,6 +112,7 @@ namespace Api.Controllers
         }
         
         [HttpPut]
+        [ProducesResponseType(typeof(string), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(string), StatusCodes.Status400BadRequest)]
         public async Task<ActionResult> EditUser([FromBody] User user)
         {

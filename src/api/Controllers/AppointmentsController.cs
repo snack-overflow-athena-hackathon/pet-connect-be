@@ -12,10 +12,12 @@ namespace Api.Controllers
     public class AppointmentsController : ControllerBase
     {
         private readonly IAppointmentService _appointmentService;
+        private readonly IUserService _userService;
 
-        public AppointmentsController(IAppointmentService appointmentService)
+        public AppointmentsController(IAppointmentService appointmentService, IUserService userService)
         {
             _appointmentService = appointmentService;
+            _userService = userService;
         }
 
         [HttpGet]
@@ -33,7 +35,7 @@ namespace Api.Controllers
                 Console.WriteLine(e);
                 return BadRequest(e);
             }
-        }
+        }   
 
         [HttpGet]
         [ProducesResponseType(typeof(Appointment), StatusCodes.Status200OK)]
@@ -60,16 +62,21 @@ namespace Api.Controllers
         }
 
         [HttpGet]
-        [ProducesResponseType(typeof(IEnumerable<Appointment>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(User), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(string), StatusCodes.Status404NotFound)]
         [ProducesResponseType(typeof(string), StatusCodes.Status400BadRequest)]
-        [Route("User/{userId:long}")]
-        public async Task<ActionResult> GetAppointmentsByUserId(long userId)
+        [Route("{appointmentId:long}/User")]
+        public async Task<ActionResult> GetUserByAppointmentId(long appointmentId)
         {
             try
             {
-                var appointments = await _appointmentService.GetAppointmentsByUserId(userId);
-                return Ok(appointments);
+                var user = await _userService.GetUserByAppointmentId(appointmentId);
+                return Ok(user);
+            }
+            catch (AppointmentNotFoundException e)
+            {
+                Log.Error(e, $"Appointment {appointmentId} could not be retrieved");
+                return NotFound(e.Message);
             }
             catch (Exception e)
             {
