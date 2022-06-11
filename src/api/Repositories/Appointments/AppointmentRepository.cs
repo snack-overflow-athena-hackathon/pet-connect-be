@@ -13,12 +13,12 @@ public class AppointmentRepository : IAppointmentRepository
 
     public async Task<IEnumerable<Appointment>> GetAppointments()
     {
-        var sqlStatement = GetAppointmentsSqlStatement();
+        var sqlStatement = GetAllAppointmentsSqlStatement();
         var results = await _query.QueryAsync<Appointment>(sqlStatement);
         return results;
     }
 
-    private static string GetAppointmentsSqlStatement()
+    private static string GetAllAppointmentsSqlStatement()
     {
         return $@"SELECT Id, AppointmentDateTimeUTC, OwnerId, VisitorId, PetId, LocationId, Cancelled, Attended FROM Appointments";
     }

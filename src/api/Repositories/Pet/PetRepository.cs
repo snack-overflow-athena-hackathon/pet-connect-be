@@ -1,37 +1,27 @@
+using pet.Repositories;
+
 namespace pet;
 
 public class PetRepository : IPetRepository
 {
+    private IQuery _query;
+
+    public PetRepository(IQuery query)
+    {
+        _query = query;
+    }
+
     public async Task<IEnumerable<Pet>> GetPets()
     {
-        var returnedPets = new List<Pet>
-        {
-            new Pet
-            {
-                Id = 123,
-                OwnerId = 456,
-                TypeId = 1,
-                Breed = "Doberman",
-                Name = "Max",
-                Bio = "Max is nice.",
-                PictureUrl = "https://www.akc.org/wp-content/uploads/2017/11/Doberman-Pinscher-standing-outdoors.jpg",
-                ListOrder = 0
-            },
-            new Pet
-            {
-                Id = 124,
-                OwnerId = 456,
-                TypeId = 1,
-                Breed = "Bischon Frise",
-                Name = "Middy",
-                Bio = "Middy is not nice.",
-                PictureUrl = "https://dogtime.com/assets/uploads/gallery/bichon-frise-dog-breed-pictures/1-sitting.jpg",
-                ListOrder = 1
-            }
-        };
-
-        return returnedPets;
+        var sqlStatement = GetAllPetsSqlStatement();
+        return await _query.QueryAsync<Pet>(sqlStatement);
     }
+
+    private static string GetAllPetsSqlStatement()
+    {
+        return $@"SELECT Id, OwnerId, TypeId, Breed, PetName, Gender, Bio, PictureUrl, ListOrder FROM Pets";
+    }
+
 
     public async Task<Pet> GetPet(long petId)
     {
@@ -41,7 +31,7 @@ public class PetRepository : IPetRepository
             OwnerId = 456,
             TypeId = 1,
             Breed = "Doberman",
-            Name = "Max",
+            PetName = "Max",
             Bio = "Max is nice.",
             PictureUrl = "https://www.akc.org/wp-content/uploads/2017/11/Doberman-Pinscher-standing-outdoors.jpg",
             ListOrder = 0

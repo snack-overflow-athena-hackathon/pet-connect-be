@@ -6,7 +6,8 @@ public class Pet
     public long OwnerId { get; set; }
     public long TypeId { get; set; }
     public string? Breed { get; set; }
-    public string Name { get; set; }
+    public string PetName { get; set; }
+    public string? Gender { get; set; }
     public string? Bio { get; set; }
     public string? PictureUrl { get; set; }
     public int ListOrder { get; set; }
