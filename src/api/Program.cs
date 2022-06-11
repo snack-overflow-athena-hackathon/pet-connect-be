@@ -1,8 +1,8 @@
 using System.Net;
 using Microsoft.OpenApi.Models;
+using Npgsql;
 using Serilog;
 using Serilog.Events;
-using npgsql;
 
 try
 {
@@ -16,6 +16,7 @@ try
 
     Log.Information($"Starting up {appName}...");
     Log.Information("Logging Initialised...");
+    Log.Information($"Database Connection: {CreateDBConnectionString()}");
 
     builder.WebHost.ConfigureKestrel(serverOptions =>
     {
