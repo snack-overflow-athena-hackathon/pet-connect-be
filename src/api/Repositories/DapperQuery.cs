@@ -1,4 +1,6 @@
-﻿namespace pet.Repositories
+﻿using Dapper;
+
+namespace pet.Repositories
 {
     public class DapperQuery : IQuery
     {

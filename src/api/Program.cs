@@ -48,12 +48,14 @@ try
     // Add Dependencies, ideally via modules to avoid this file becoming too large
     builder.Services.AddScoped<IPetService, PetService>();
     builder.Services.AddScoped<IUserService, UserService>();
+    builder.Services.AddScoped<IAppointmentService, AppointmentService>();
 
     // Repo
     builder.Services.AddScoped<IDbConnectionFactory, DbConnectionFactory>();
     builder.Services.AddScoped<IQuery, DapperQuery>();
     builder.Services.AddScoped<IPetRepository, PetRepository>();
     builder.Services.AddScoped<IUserRepository, UserRepository>();
+    builder.Services.AddScoped<IAppointmentRepository, AppointmentRepository>();
 
     // Build the app
     var app = builder.Build();
