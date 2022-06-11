@@ -15,16 +15,20 @@ namespace pet.Repositories
         private static string CreateDbConnectionString()
         {
             var databaseUrl = Environment.GetEnvironmentVariable("DATABASE_URL");
-            var databaseUri = new Uri(databaseUrl);
-            var userInfo = databaseUri.UserInfo.Split(':');
+
+            var main = databaseUrl.Split("/")[1];
+            var user = main.Split(":")[0];
+            var pass = main.Split(":")[1].Split("@")[0];
+            var host = main.Split("@")[1].Split(":")[0];
+            var db = databaseUrl.Split("/")[2];
 
             var builder = new NpgsqlConnectionStringBuilder
             {
-                Host = databaseUri.Host,
-                Port = databaseUri.Port,
-                Username = userInfo[0],
-                Password = userInfo[1],
-                Database = databaseUri.LocalPath.TrimStart('/')
+                Host = host,
+                Port = 5432,
+                Username = user,
+                Password = pass,
+                Database = db
             };
 
             return builder.ToString();
