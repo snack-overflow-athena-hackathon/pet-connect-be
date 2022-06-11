@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
+using pet;
 
 namespace Api.Controllers
 {
@@ -29,30 +30,6 @@ namespace Api.Controllers
             };
 
             return Ok(returnedPets);
-        }
-    }
-
-    public class Pet
-    {
-        public long Id { get; set; }
-        public long OwnerId { get; set; }
-        public long TypeId { get; set; }
-        public string Breed { get; set; }
-        public string Name { get; set; }
-        public string Bio { get; set; }
-        public string PictureUrl { get; set; }
-        public int ListOrder { get; set; }
-
-        public Pet(long id, long ownerId, long typeId, string breed, string name, string bio, string pictureUrl, int listOrder)
-        {
-            Id = id;
-            OwnerId = ownerId;
-            TypeId = typeId;
-            Breed = breed;
-            Name = name;
-            Bio = bio;
-            PictureUrl = pictureUrl;
-            ListOrder = listOrder;
         }
     }
 }

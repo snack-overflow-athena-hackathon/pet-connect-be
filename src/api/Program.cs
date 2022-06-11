@@ -9,6 +9,7 @@ try
 
     var appName = builder.Configuration.GetValue<string>("ApiConfig:Name");
     var appVersion = builder.Configuration.GetValue<string>("ApiConfig:Version");
+    var MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
     
     var loggerConfig = CreateLoggerConfig(appName);
     Log.Logger = loggerConfig.CreateLogger();
@@ -32,6 +33,11 @@ try
 
     // Ensure we add health checks!
     builder.Services.AddHealthChecks();
+    builder.Services.AddCors(options =>
+        options.AddPolicy(name: MyAllowSpecificOrigins, policy =>
+        {
+            policy.WithOrigins("http://localhost:3000");
+        }));
 
     // Add AWS Services here
 
@@ -49,6 +55,7 @@ try
 
     // Use secure redirection automatically
     app.UseHttpsRedirection();
+    app.UseCors(MyAllowSpecificOrigins);
     
     // Map endpoints
     app.MapHealthChecks("/health");
@@ -56,6 +63,7 @@ try
     
     // Uncomment here to add authorisation
     // app.UseAuthorization();
+
 
     // Run app
     app.Run();
