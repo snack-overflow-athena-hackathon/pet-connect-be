@@ -28,4 +28,9 @@ public class PetService : IPetService
     {
         return await _petRepository.AddPet(pet);
     }
+
+    public async Task EditPet(Pet pet)
+    {
+        await _petRepository.EditPet(pet);
+    }
 }

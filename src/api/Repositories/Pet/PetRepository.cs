@@ -21,6 +21,30 @@ public class PetRepository : IPetRepository
         
         return pets;
     }
+    
+    public async Task<IEnumerable<Pet>> GetPetsByUserId(long ownerId)
+    {
+        var sql = GetPetsByOwnerIdSqlStatement();
+        var pets = await _query.QueryAsync<Pet>(sql, new
+        {
+            OwnerId = ownerId
+        });
+        
+        Log.Information($"Getting all pets for owner Id {ownerId}, found {pets.Count()} in database for this user.");
+        
+        return pets;
+    }
+    
+    public async Task<Pet> GetPetByPetId(long petId)
+    {
+        var sql = GetPetSqlStatement();
+        var returnedPet = await _query.QueryFirstOrDefaultAsync<Pet>(sql, new
+        {
+            Id = petId
+        });
+
+        return returnedPet;
+    }
 
     public async Task<long> AddPet(Pet pet)
     {
@@ -30,6 +54,14 @@ public class PetRepository : IPetRepository
         Log.Information($"Added new pet {pet.PetName} to database with id {id}");
 
         return id;
+    }
+    
+    public async Task EditPet(Pet pet)
+    {
+        var sql = EditPetSqlStatement();
+        await _query.ExecuteAsync(sql, pet);
+        
+        Log.Information($"Edited Pet {pet.PetName}.");
     }
 
     private static string GetAllPetsSqlStatement()
@@ -47,48 +79,35 @@ public class PetRepository : IPetRepository
                    @OwnerId, @TypeId, @Breed, @PetName, @Gender, @Bio, @PictureUrl, @ListOrder
                  ) RETURNING Id";
     }
-
-    public async Task<Pet> GetPetByPetId(long petId)
+    
+    private static string EditPetSqlStatement()
     {
-        return new Pet
-        {
-            Id = petId,
-            OwnerId = 1,
-            TypeId = 1,
-            Breed = "Doberman",
-            PetName = "Max",
-            Bio = "Max is nice.",
-            PictureUrl = "https://www.akc.org/wp-content/uploads/2017/11/Doberman-Pinscher-standing-outdoors.jpg",
-            ListOrder = 0
-        };
+        return $@"UPDATE Pets
+                    SET
+                    OwnerId = @OwnerId, 
+                    TypeId = @TypeId, 
+                    Breed = @Breed, 
+                    PetName = @PetName, 
+                    Gender = @Gender, 
+                    Bio = @Bio, 
+                    PictureUrl = @PictureUrl, 
+                    ListOrder = @ListOrder
+                    WHERE Id = @Id";
     }
-
-    public async Task<IEnumerable<Pet>> GetPetsByUserId(long userId)
+    
+    private static string GetPetSqlStatement()
     {
-        return new List<Pet>
-        {
-            new Pet
-            {
-                Id = 11,
-                OwnerId = userId,
-                TypeId = 1,
-                Breed = "Doberman",
-                PetName = "Max",
-                Bio = "Max is nice.",
-                PictureUrl = "https://www.akc.org/wp-content/uploads/2017/11/Doberman-Pinscher-standing-outdoors.jpg",
-                ListOrder = 0
-            },
-            new Pet
-            {
-                Id = 12,
-                OwnerId = userId,
-                TypeId = 1,
-                Breed = "Another Doberman",
-                PetName = "Max 2",
-                Bio = "Other Max is not so nice.",
-                PictureUrl = "https://www.akc.org/wp-content/uploads/2017/11/Doberman-Pinscher-standing-outdoors.jpg",
-                ListOrder = 1
-            }
-        };
+        return $@"
+                SELECT Id, OwnerId, TypeId, Breed, PetName, Gender, Bio, PictureUrl, ListOrder
+                FROM Pets
+                WHERE Id = @Id";
+    }
+    
+    private static string GetPetsByOwnerIdSqlStatement()
+    {
+        return $@"
+                SELECT Id, OwnerId, TypeId, Breed, PetName, Gender, Bio, PictureUrl, ListOrder
+                FROM Pets
+                WHERE OwnerId = @OwnerId";
     }
 }

@@ -27,4 +27,14 @@ public class UserService : IUserService
         var petData = await _petRepository.GetPetByPetId(petId);
         return await _userRepository.GetUserByUserId(petData.OwnerId);
     }
+
+    public async Task<long> AddUser(User user)
+    {
+        return await _userRepository.AddUser(user);
+    }
+
+    public async Task EditUser(User user)
+    {
+        await _userRepository.EditUser(user);
+    }
 }

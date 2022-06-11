@@ -68,5 +68,40 @@ namespace Api.Controllers
                 return BadRequest(e);
             }
         }
+        
+        [HttpPost]
+        [ProducesResponseType(typeof(User), StatusCodes.Status201Created)]
+        [ProducesResponseType(typeof(string), StatusCodes.Status400BadRequest)]
+        public async Task<ActionResult> AddUser([FromBody] User user)
+        {
+            try
+            {
+                var id = await _userService.AddUser(user);
+                user.Id = id;
+
+                return Created($"{id}", user);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                return BadRequest(e);
+            }
+        }
+        
+        [HttpPut]
+        [ProducesResponseType(typeof(string), StatusCodes.Status400BadRequest)]
+        public async Task<ActionResult> EditUser([FromBody] User user)
+        {
+            try
+            {
+                await _userService.EditUser(user);
+                return Ok();
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                return BadRequest(e);
+            }
+        }
     }
 }

@@ -6,4 +6,5 @@ public interface IPetRepository
     Task<Pet> GetPetByPetId(long petId);
     Task<IEnumerable<Pet>> GetPetsByUserId(long userId);
     Task<long> AddPet(Pet pet);
+    Task EditPet(Pet pet);
 }

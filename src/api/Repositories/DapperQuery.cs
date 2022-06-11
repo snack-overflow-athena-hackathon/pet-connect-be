@@ -39,10 +39,10 @@ namespace pet.Repositories
             return await connection.QueryAsync<T>(sql);
         }
         
-        public async Task<T> QuerySingleAsync<T>(string sql)
+        public async Task<IEnumerable<T>> QueryAsync<T>(string sql, object parameters)
         {
             using var connection = _dbConnectionFactory.CreateConnection();
-            return await connection.ExecuteScalarAsync<T>(sql);
+            return await connection.QueryAsync<T>(sql, parameters);
         }
     }
 }

@@ -36,14 +36,14 @@ namespace Api.Controllers
         [HttpPost]
         [ProducesResponseType(typeof(Pet), StatusCodes.Status201Created)]
         [ProducesResponseType(typeof(string), StatusCodes.Status400BadRequest)]
-        public async Task<ActionResult> CreatePet([FromBody] Pet pet)
+        public async Task<ActionResult> AddPet([FromBody] Pet pet)
         {
             try
             {
                 var id = await _petService.AddPet(pet);
                 pet.Id = id;
 
-                return Created($"ByPetId/{id}", pet);
+                return Created($"{id}", pet);
             }
             catch (Exception e)
             {
@@ -80,6 +80,22 @@ namespace Api.Controllers
             {
                 var returnedPets = await _petService.GetPetsByUserId(userId);
                 return Ok(returnedPets);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                return BadRequest(e);
+            }
+        }
+        
+        [HttpPut]
+        [ProducesResponseType(typeof(string), StatusCodes.Status400BadRequest)]
+        public async Task<ActionResult> EditPet([FromBody] Pet pet)
+        {
+            try
+            {
+                await _petService.EditPet(pet);
+                return Ok();
             }
             catch (Exception e)
             {
