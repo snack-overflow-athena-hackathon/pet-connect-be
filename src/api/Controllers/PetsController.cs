@@ -20,25 +20,49 @@ namespace Api.Controllers
         [HttpGet]
         public async Task<ActionResult> GetPets()
         {
-            var returnedPets = await _petService.GetPets();
+            try
+            {
+                var returnedPets = await _petService.GetPets();
+                return Ok(returnedPets);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                return BadRequest(e);
+            }
 
-            return Ok(returnedPets);
         }
 
         [HttpGet]
         [Route("ByUserId/{userId}")]
         public async Task<ActionResult> GetPetsByUserId(long userId)
         {
-            return null;
+            try
+            {
+                var returnedPet = await _petService.GetPetByUserId(userId);
+                return Ok(returnedPet);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                return BadRequest(e);
+            }
         }
         
         [HttpGet]
         [Route("ByPetId/{petId}")]
         public async Task<ActionResult> GetPetByPetId(long petId)
         {
-            var returnedPet = await _petService.GetPet(petId);
-
-            return Ok(returnedPet);
+            try
+            {
+                var returnedPet = await _petService.GetPetByPetId(petId);
+                return Ok(returnedPet);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                return BadRequest(e);
+            }
         }
         
         

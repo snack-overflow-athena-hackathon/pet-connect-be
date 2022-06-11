@@ -3,5 +3,6 @@ namespace pet;
 public interface IPetRepository
 {
     Task<IEnumerable<Pet>> GetPets();
-    Task<Pet> GetPet(long petId);
+    Task<Pet> GetPetByPetId(long petId);
+    Task<Pet> GetPetByUserId(long userId);
 }
