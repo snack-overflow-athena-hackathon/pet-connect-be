@@ -1,5 +1,6 @@
 ﻿using System.Data;
 using Npgsql;
+using Serilog;
 
 namespace pet.Repositories
 {
@@ -15,12 +16,15 @@ namespace pet.Repositories
         private static string CreateDbConnectionString()
         {
             var databaseUrl = Environment.GetEnvironmentVariable("DATABASE_URL");
+            Log.Information($"Database: {databaseUrl}");
 
-            var main = databaseUrl.Split("/")[1];
+            var main = databaseUrl.Split("/")[2];
             var user = main.Split(":")[0];
             var pass = main.Split(":")[1].Split("@")[0];
             var host = main.Split("@")[1].Split(":")[0];
-            var db = databaseUrl.Split("/")[2];
+            var db = databaseUrl.Split("/")[3];
+
+            Log.Information($"user: {user} pass: {pass} host: {host} db: {db}");
 
             var builder = new NpgsqlConnectionStringBuilder
             {
