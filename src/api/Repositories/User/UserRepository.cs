@@ -34,7 +34,7 @@ public class UserRepository : IUserRepository
     private static User MapDisplayName(User user)
     {
         var pronoun = string.IsNullOrEmpty(user.Pronouns) ? null : " (" + user.Pronouns + ")";
-        user.DisplayName = (string.IsNullOrEmpty(user.PreferredName) ? user.FirstName : user.PreferredName) +
+        user.DisplayName = (string.IsNullOrEmpty(user.PreferredName) ? user.FirstName + " " + user.LastName : user.PreferredName) +
                            (pronoun ?? "");
         return user;
     }
