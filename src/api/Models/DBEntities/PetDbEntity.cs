@@ -14,7 +14,10 @@
         public bool Deactivated { get; set; }
 
         public string Animal { get; set; }
+
         public string FirstName { get; set; }
         public string LastName { get; set; }
+        public string PreferredName { get; set; }
+        public string Pronouns { get; set; }
     }
 }

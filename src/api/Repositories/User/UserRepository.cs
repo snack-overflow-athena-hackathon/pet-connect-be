@@ -15,18 +15,28 @@ public class UserRepository : IUserRepository
     public async Task<IEnumerable<User>> GetUsers()
     {
         var sqlStatement = GetAllUsersSqlStatement();
-        return await _query.QueryAsync<User>(sqlStatement);
+        var users = await _query.QueryAsync<User>(sqlStatement);
+
+        return users.Select(MapDisplayName);
     }
 
     public async Task<User> GetUserByUserId(long userId)
     {
         var sql = GetUserSqlStatement();
-        var returnedUser = await _query.QueryFirstOrDefaultAsync<User>(sql, new
+        var user = await _query.QueryFirstOrDefaultAsync<User>(sql, new
         {
             UserId = userId
         });
 
-        return returnedUser;
+        return MapDisplayName(user);
+    }
+
+    private static User MapDisplayName(User user)
+    {
+        var pronoun = string.IsNullOrEmpty(user.Pronouns) ? null : " (" + user.Pronouns + ")";
+        user.DisplayName = (string.IsNullOrEmpty(user.PreferredName) ? user.FirstName : user.PreferredName) +
+                           (pronoun ?? "");
+        return user;
     }
 
     public async Task<long> AddUser(User user)

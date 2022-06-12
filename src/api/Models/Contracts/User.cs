@@ -13,4 +13,5 @@ public class User
     public string? Bio { get; set; }
     public string? PictureUrl { get; set; }
     public bool Deactivated { get; set; }
+    public string DisplayName { get; set; }
 }

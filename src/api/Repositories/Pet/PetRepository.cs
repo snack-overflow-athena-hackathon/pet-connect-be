@@ -73,6 +73,7 @@ public class PetRepository : IPetRepository
             Breed = petDbEntity.Breed,
             PetName = petDbEntity.PetName,
             OwnerId = petDbEntity.OwnerId,
+            OwnerDisplayName = ResolveDisplayName(petDbEntity),
             TypeId = petDbEntity.TypeId,
             Gender = petDbEntity.Gender,
             Animal = petDbEntity.Animal,
@@ -80,14 +81,19 @@ public class PetRepository : IPetRepository
             Bio = petDbEntity.Bio,
             Deactivated = petDbEntity.Deactivated,
             ListOrder = petDbEntity.ListOrder,
-            OwnerName = petDbEntity.FirstName + " " + petDbEntity.LastName
         };
+    }
+
+    private static string ResolveDisplayName(PetDbEntity petDbEntity)
+    {
+        return string.IsNullOrEmpty(petDbEntity.PreferredName) ? petDbEntity.FirstName : petDbEntity.PreferredName;
     }
 
     private static string GetAllPetsSqlStatement()
     {
         return @"
-                 SELECT p.Id, p.OwnerId, p.TypeId, p.Breed, p.PetName, p.Gender, p.Bio, p.PictureUrl, p.ListOrder, p.Deactivated, a.Animal, u.FirstName, u.LastName 
+                 SELECT p.Id, p.OwnerId, p.TypeId, p.Breed, p.PetName, p.Gender, p.Bio, p.PictureUrl, p.ListOrder, p.Deactivated,
+                 a.Animal, u.FirstName, u.LastName, u.PreferredName, u.Pronouns
                  FROM Pets p
                  LEFT JOIN AnimalType a ON a.Id = p.TypeId
                  LEFT JOIN Users u ON u.Id = p.OwnerId";
@@ -96,21 +102,23 @@ public class PetRepository : IPetRepository
     private static string GetPetSqlStatement()
     {
         return @"
-                 SELECT p.Id, p.OwnerId, p.TypeId, p.Breed, p.PetName, p.Gender, p.Bio, p.PictureUrl, p.ListOrder, p.Deactivated, a.Animal, u.FirstName, u.LastName 
+                 SELECT p.Id, p.OwnerId, p.TypeId, p.Breed, p.PetName, p.Gender, p.Bio, p.PictureUrl, p.ListOrder, p.Deactivated, 
+                 a.Animal, u.FirstName, u.LastName, u.PreferredName, u.Pronouns
                  FROM Pets p
                  LEFT JOIN AnimalType a ON a.Id = p.TypeId
                  LEFT JOIN Users u ON u.Id = p.OwnerId
-                 WHERE Id = @Id";
+                 WHERE p.Id = @Id";
     }
     
     private static string GetPetsByOwnerIdSqlStatement()
     {
         return @"
-                 SELECT p.Id, p.OwnerId, p.TypeId, p.Breed, p.PetName, p.Gender, p.Bio, p.PictureUrl, p.ListOrder, p.Deactivated, a.Animal, u.FirstName, u.LastName 
+                 SELECT p.Id, p.OwnerId, p.TypeId, p.Breed, p.PetName, p.Gender, p.Bio, p.PictureUrl, p.ListOrder, p.Deactivated,
+                 a.Animal, u.FirstName, u.LastName, u.PreferredName, u.Pronouns
                  FROM Pets p
                  LEFT JOIN AnimalType a ON a.Id = p.TypeId
                  LEFT JOIN Users u ON u.Id = p.OwnerId
-                 WHERE OwnerId = @OwnerId";
+                 WHERE p.OwnerId = @OwnerId";
     }
 
     private static string AddPetSqlStatement()
@@ -140,5 +148,4 @@ public class PetRepository : IPetRepository
                     Deactivated = @Deactivated
                     WHERE Id = @Id";
     }
-
 }
