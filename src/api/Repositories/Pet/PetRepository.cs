@@ -1,3 +1,4 @@
+using pet.Models.DBEntities;
 using pet.Repositories;
 using Serilog;
 
@@ -15,35 +16,35 @@ public class PetRepository : IPetRepository
     public async Task<IEnumerable<Pet>> GetPets()
     {
         var sql = GetAllPetsSqlStatement();
-        var pets = await _query.QueryAsync<Pet>(sql);
+        var pets = await _query.QueryAsync<PetDbEntity>(sql);
         
         Log.Information($"Getting all pets, found {pets.Count()} in database");
-        
-        return pets;
+
+        return pets.Select(MapToContract);
     }
-    
+
     public async Task<IEnumerable<Pet>> GetPetsByUserId(long ownerId)
     {
         var sql = GetPetsByOwnerIdSqlStatement();
-        var pets = await _query.QueryAsync<Pet>(sql, new
+        var pets = await _query.QueryAsync<PetDbEntity>(sql, new
         {
             OwnerId = ownerId
         });
         
         Log.Information($"Getting all pets for owner Id {ownerId}, found {pets.Count()} in database for this user.");
-        
-        return pets;
+
+        return pets.Select(MapToContract);
     }
     
     public async Task<Pet> GetPetByPetId(long petId)
     {
         var sql = GetPetSqlStatement();
-        var returnedPet = await _query.QueryFirstOrDefaultAsync<Pet>(sql, new
+        var pet = await _query.QueryFirstOrDefaultAsync<PetDbEntity>(sql, new
         {
             Id = petId
         });
 
-        return returnedPet;
+        return MapToContract(pet);
     }
 
     public async Task<long> AddPet(Pet pet)
@@ -64,14 +65,54 @@ public class PetRepository : IPetRepository
         Log.Information($"Edited Pet {pet.PetName}.");
     }
 
+    private static Pet MapToContract(PetDbEntity petDbEntity)
+    {
+        return new Pet()
+        {
+            Id = petDbEntity.Id,
+            Breed = petDbEntity.Breed,
+            PetName = petDbEntity.PetName,
+            OwnerId = petDbEntity.OwnerId,
+            TypeId = petDbEntity.TypeId,
+            Gender = petDbEntity.Gender,
+            Animal = petDbEntity.Animal,
+            PictureUrl = petDbEntity.PictureUrl,
+            Bio = petDbEntity.Bio,
+            Deactivated = petDbEntity.Deactivated,
+            ListOrder = petDbEntity.ListOrder,
+            OwnerName = petDbEntity.FirstName + " " + petDbEntity.LastName
+        };
+    }
+
     private static string GetAllPetsSqlStatement()
     {
-        return $@"
-                SELECT Pets.Id, Pets.OwnerId, Pets.TypeId, Pets.Breed, Pets.PetName, Pets.Gender, Pets.Bio, Pets.PictureUrl, Pets.ListOrder, Pets.Deactivated,
-                type.Animal
-                FROM Pets
-                LEFT JOIN AnimalType type ON type.Id = Pets.TypeId";
+        return @"
+                 SELECT p.Id, p.OwnerId, p.TypeId, p.Breed, p.PetName, p.Gender, p.Bio, p.PictureUrl, p.ListOrder, p.Deactivated, a.Animal, u.FirstName, u.LastName 
+                 FROM Pets p
+                 LEFT JOIN AnimalType a ON a.Id = p.TypeId
+                 LEFT JOIN Users u ON u.Id = p.OwnerId";
     }
+
+    private static string GetPetSqlStatement()
+    {
+        return @"
+                 SELECT p.Id, p.OwnerId, p.TypeId, p.Breed, p.PetName, p.Gender, p.Bio, p.PictureUrl, p.ListOrder, p.Deactivated, a.Animal, u.FirstName, u.LastName 
+                 FROM Pets p
+                 LEFT JOIN AnimalType a ON a.Id = p.TypeId
+                 LEFT JOIN Users u ON u.Id = p.OwnerId
+                 WHERE Id = @Id";
+    }
+    
+    private static string GetPetsByOwnerIdSqlStatement()
+    {
+        return @"
+                 SELECT p.Id, p.OwnerId, p.TypeId, p.Breed, p.PetName, p.Gender, p.Bio, p.PictureUrl, p.ListOrder, p.Deactivated, a.Animal, u.FirstName, u.LastName 
+                 FROM Pets p
+                 LEFT JOIN AnimalType a ON a.Id = p.TypeId
+                 LEFT JOIN Users u ON u.Id = p.OwnerId
+                 WHERE OwnerId = @OwnerId";
+    }
+
     private static string AddPetSqlStatement()
     {
         return $@"INSERT INTO Pets
@@ -83,7 +124,7 @@ public class PetRepository : IPetRepository
                    @OwnerId, @TypeId, @Breed, @PetName, @Gender, @Bio, @PictureUrl, @ListOrder, @Deactivated
                  ) RETURNING Id";
     }
-    
+
     private static string EditPetSqlStatement()
     {
         return $@"UPDATE Pets
@@ -99,20 +140,5 @@ public class PetRepository : IPetRepository
                     Deactivated = @Deactivated
                     WHERE Id = @Id";
     }
-    
-    private static string GetPetSqlStatement()
-    {
-        return $@"
-                SELECT Id, OwnerId, TypeId, Breed, PetName, Gender, Bio, PictureUrl, ListOrder, Deactivated
-                FROM Pets
-                WHERE Id = @Id";
-    }
-    
-    private static string GetPetsByOwnerIdSqlStatement()
-    {
-        return $@"
-                SELECT Id, OwnerId, TypeId, Breed, PetName, Gender, Bio, PictureUrl, ListOrder, Deactivated
-                FROM Pets
-                WHERE OwnerId = @OwnerId";
-    }
+
 }

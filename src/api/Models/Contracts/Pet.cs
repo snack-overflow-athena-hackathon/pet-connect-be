@@ -13,6 +13,7 @@ public class Pet
     public int ListOrder { get; set; }
     public bool Deactivated { get; set; }
     public string Animal { get; set; }
+    public string OwnerName { get; set; }
 }
 
 public class Reviews
