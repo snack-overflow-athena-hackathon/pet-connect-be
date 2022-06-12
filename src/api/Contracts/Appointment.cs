@@ -9,4 +9,11 @@ public class Appointment
     public long PetId { get; set; }
     public long LocationId { get; set; }
     public long AppointmentState { get; set; }
+    public AppointmentState State { get; set; }
+}
+
+public class AppointmentState
+{
+    public long Id { get; set; }
+    public string CurrentState { get; set; }
 }

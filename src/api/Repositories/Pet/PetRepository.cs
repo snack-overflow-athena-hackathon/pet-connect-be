@@ -66,7 +66,11 @@ public class PetRepository : IPetRepository
 
     private static string GetAllPetsSqlStatement()
     {
-        return $@"SELECT Id, OwnerId, TypeId, Breed, PetName, Gender, Bio, PictureUrl, ListOrder, Deactivated FROM Pets";
+        return $@"
+                SELECT Pets.Id, Pets.OwnerId, Pets.TypeId, Pets.Breed, Pets.PetName, Pets.Gender, Pets.Bio, Pets.PictureUrl, Pets.ListOrder, Pets.Deactivated,
+                type.Animal
+                FROM Pets
+                LEFT JOIN AnimalType type ON type.Id = Pets.TypeId";
     }
     private static string AddPetSqlStatement()
     {

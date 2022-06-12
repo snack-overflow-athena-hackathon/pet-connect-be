@@ -12,4 +12,14 @@ public class Pet
     public string? PictureUrl { get; set; }
     public int ListOrder { get; set; }
     public bool Deactivated { get; set; }
+    public string Animal { get; set; }
+}
+
+public class Reviews
+{
+    public long Id { get; set; }
+    public long PetId { get; set; }
+    public int Rating { get; set; }
+    public string Title { get; set; }
+    public string Review { get; set; }
 }
