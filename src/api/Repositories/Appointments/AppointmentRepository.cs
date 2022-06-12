@@ -52,6 +52,7 @@ public class AppointmentRepository : IAppointmentRepository
             Id = appointmentDbEntity.Id,
             PetId = appointmentDbEntity.PetId,
             PetName = appointmentDbEntity.PetName,
+            PetPictureUrl = appointmentDbEntity.PictureUrl,
             OwnerId = appointmentDbEntity.OwnerId,
             OwnerDisplayName = string.IsNullOrEmpty(appointmentDbEntity.OwnerPreferredName) ? appointmentDbEntity.OwnerFirstName : appointmentDbEntity.OwnerPreferredName,
             VisitorId = appointmentDbEntity.VisitorId,
@@ -84,7 +85,8 @@ public class AppointmentRepository : IAppointmentRepository
     {
         return @"
                  SELECT a.Id, a.AppointmentDateTimeUTC, a.OwnerId, a.VisitorId, a.PetId, a.LocationId, a.AppointmentState,
-                 o.FirstName AS OwnerFirstName, o.PreferredName AS OwnerPreferredName, v.FirstName AS VisitorFirstName, v.PreferredName AS VisitorPreferredName, p.PetName
+                 o.FirstName AS OwnerFirstName, o.PreferredName AS OwnerPreferredName, v.FirstName AS VisitorFirstName, v.PreferredName AS VisitorPreferredName,
+                 p.PetName, p.PictureUrl
                  FROM Appointments a
                  LEFT JOIN Users o ON o.ID = a.OwnerId
                  LEFT JOIN Users v ON v.ID = a.VisitorId
@@ -95,7 +97,8 @@ public class AppointmentRepository : IAppointmentRepository
     {
         return @"
                  SELECT a.Id, a.AppointmentDateTimeUTC, a.OwnerId, a.VisitorId, a.PetId, a.LocationId, a.AppointmentState,
-                 o.FirstName AS OwnerFirstName, o.PreferredName AS OwnerPreferredName, v.FirstName AS VisitorFirstName, v.PreferredName AS VisitorPreferredName, p.PetName
+                 o.FirstName AS OwnerFirstName, o.PreferredName AS OwnerPreferredName, v.FirstName AS VisitorFirstName, v.PreferredName AS VisitorPreferredName,
+                 p.PetName, p.PictureUrl
                  FROM Appointments a
                  LEFT JOIN Users o ON o.ID = a.OwnerId
                  LEFT JOIN Users v ON v.ID = a.VisitorId
@@ -107,7 +110,8 @@ public class AppointmentRepository : IAppointmentRepository
     {
         return @"
                  SELECT a.Id, a.AppointmentDateTimeUTC, a.OwnerId, a.VisitorId, a.PetId, a.LocationId, a.AppointmentState,
-                 o.FirstName AS OwnerFirstName, o.PreferredName AS OwnerPreferredName, v.FirstName AS VisitorFirstName, v.PreferredName AS VisitorPreferredName, p.PetName
+                 o.FirstName AS OwnerFirstName, o.PreferredName AS OwnerPreferredName, v.FirstName AS VisitorFirstName, v.PreferredName AS VisitorPreferredName,
+                 p.PetName, p.PictureUrl
                  FROM Appointments a
                  LEFT JOIN Users o ON o.ID = a.OwnerId
                  LEFT JOIN Users v ON v.ID = a.VisitorId

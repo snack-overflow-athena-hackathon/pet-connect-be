@@ -10,6 +10,7 @@ public class Appointment
     public string VisitorDisplayName { get; set; }
     public long PetId { get; set; }
     public string PetName { get; set; }
+    public string PetPictureUrl { get; set; }
     public long LocationId { get; set; }
     public long AppointmentState { get; set; }
     public AppointmentState State { get; set; }

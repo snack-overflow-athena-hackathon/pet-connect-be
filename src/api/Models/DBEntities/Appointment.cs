@@ -8,6 +8,7 @@ public class AppointmentDBEntity
     public long VisitorId { get; set; }
     public long PetId { get; set; }
     public string PetName { get; set; }
+    public string PictureUrl { get; set; }
     public long LocationId { get; set; }
     public long AppointmentState { get; set; }
 
