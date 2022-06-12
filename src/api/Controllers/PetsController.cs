@@ -35,25 +35,6 @@ namespace Api.Controllers
             }
         }
 
-        [HttpPost]
-        [ProducesResponseType(typeof(Pet), StatusCodes.Status201Created)]
-        [ProducesResponseType(typeof(string), StatusCodes.Status400BadRequest)]
-        public async Task<ActionResult> AddPet([FromBody] Pet pet)
-        {
-            try
-            {
-                var id = await _petService.AddPet(pet);
-                pet.Id = id;
-
-                return Created($"{id}", pet);
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine(e);
-                return BadRequest(e);
-            }
-        }
-
         [HttpGet]
         [ProducesResponseType(typeof(Pet), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(string), StatusCodes.Status400BadRequest)]
@@ -90,7 +71,27 @@ namespace Api.Controllers
             }
         }
 
+        [HttpPost]
+        [ProducesResponseType(typeof(Pet), StatusCodes.Status201Created)]
+        [ProducesResponseType(typeof(string), StatusCodes.Status400BadRequest)]
+        public async Task<ActionResult> AddPet([FromBody] Pet pet)
+        {
+            try
+            {
+                var id = await _petService.AddPet(pet);
+                pet.Id = id;
+
+                return Created($"{id}", pet);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                return BadRequest(e);
+            }
+        }
+
         [HttpPut]
+        [ProducesResponseType(typeof(string), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(string), StatusCodes.Status400BadRequest)]
         public async Task<ActionResult> EditPet([FromBody] Pet pet)
         {
