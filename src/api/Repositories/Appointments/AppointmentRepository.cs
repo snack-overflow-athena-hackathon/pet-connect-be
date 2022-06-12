@@ -1,5 +1,6 @@
 using pet.Exceptions;
 using pet.Repositories;
+using pet.Models.DBEntities;
 using Serilog;
 
 namespace pet;
@@ -16,32 +17,49 @@ public class AppointmentRepository : IAppointmentRepository
     public async Task<IEnumerable<Appointment>> GetAppointments()
     {
         var sqlStatement = GetAllAppointmentsSqlStatement();
-        var appointments = await _query.QueryAsync<Appointment>(sqlStatement);
+        var appointments = await _query.QueryAsync<AppointmentDBEntity>(sqlStatement);
 
         Log.Information($"Getting all appointments, found {appointments.Count()} in database");
 
-        return appointments;
+        return appointments.Select(MapToContract);
     }
 
     public async Task<IEnumerable<Appointment>> GetAppointmentsByUserId(long ownerId)
     {
         var sql = GetAppointmentsByUserIdSqlStatement();
-        var appointments = await _query.QueryAsync<Appointment>(sql, new {OwnerId = ownerId});
+        var appointments = await _query.QueryAsync<AppointmentDBEntity>(sql, new {OwnerId = ownerId});
 
         Log.Information($"Getting all appointments for owner Id {ownerId}, found {appointments.Count()} in database for this user.");
 
-        return appointments;
+        return appointments.Select(MapToContract);
     }
 
     public async Task<Appointment> GetAppointmentById(long appointmentId)
     {
         var sql = GetAppointmentByIdSqlStatement();
-        var appointment = await _query.QueryFirstOrDefaultAsync<Appointment>(sql, new {Id = appointmentId});
+        var appointment = await _query.QueryFirstOrDefaultAsync<AppointmentDBEntity>(sql, new {Id = appointmentId});
 
         if (appointment == null)
             throw new AppointmentNotFoundException(appointmentId);
 
-        return appointment;
+        return MapToContract(appointment);
+    }
+
+    private static Appointment MapToContract(AppointmentDBEntity appointmentDbEntity)
+    {
+        return new Appointment()
+        {
+            Id = appointmentDbEntity.Id,
+            PetId = appointmentDbEntity.PetId,
+            PetName = appointmentDbEntity.PetName,
+            OwnerId = appointmentDbEntity.OwnerId,
+            OwnerDisplayName = string.IsNullOrEmpty(appointmentDbEntity.OwnerPreferredName) ? appointmentDbEntity.OwnerFirstName : appointmentDbEntity.OwnerPreferredName,
+            VisitorId = appointmentDbEntity.VisitorId,
+            VisitorDisplayName = string.IsNullOrEmpty(appointmentDbEntity.VisitorPreferredName) ? appointmentDbEntity.VisitorFirstName : appointmentDbEntity.VisitorPreferredName,
+            AppointmentDateTimeUTC = appointmentDbEntity.AppointmentDateTimeUTC,
+            AppointmentState = appointmentDbEntity.AppointmentState,
+            LocationId = appointmentDbEntity.LocationId
+        };
     }
 
     public async Task<long> AddAppointment(Appointment appointment)
@@ -65,24 +83,36 @@ public class AppointmentRepository : IAppointmentRepository
     private static string GetAllAppointmentsSqlStatement()
     {
         return @"
-                 SELECT Id, AppointmentDateTimeUTC, OwnerId, VisitorId, PetId, LocationId, AppointmentState
-                 FROM Appointments";
+                 SELECT a.Id, a.AppointmentDateTimeUTC, a.OwnerId, a.VisitorId, a.PetId, a.LocationId, a.AppointmentState,
+                 o.FirstName AS OwnerFirstName, o.PreferredName AS OwnerPreferredName, v.FirstName AS VisitorFirstName, v.PreferredName AS VisitorPreferredName, p.PetName
+                 FROM Appointments a
+                 LEFT JOIN Users o ON o.ID = a.OwnerId
+                 LEFT JOIN Users v ON v.ID = a.VisitorId
+                 LEFT JOIN Pets p ON p.ID = a.PetId";
     }
 
     private static string GetAppointmentsByUserIdSqlStatement()
     {
         return @"
-                 SELECT Id, AppointmentDateTimeUTC, OwnerId, VisitorId, PetId, LocationId, AppointmentState
-                 FROM Appointments
-                 WHERE OwnerId = @OwnerId";
+                 SELECT a.Id, a.AppointmentDateTimeUTC, a.OwnerId, a.VisitorId, a.PetId, a.LocationId, a.AppointmentState,
+                 o.FirstName AS OwnerFirstName, o.PreferredName AS OwnerPreferredName, v.FirstName AS VisitorFirstName, v.PreferredName AS VisitorPreferredName, p.PetName
+                 FROM Appointments a
+                 LEFT JOIN Users o ON o.ID = a.OwnerId
+                 LEFT JOIN Users v ON v.ID = a.VisitorId
+                 LEFT JOIN Pets p ON p.ID = a.PetId
+                 WHERE a.OwnerId = @OwnerId";
     }
 
     private static string GetAppointmentByIdSqlStatement()
     {
         return @"
-                 SELECT Id, AppointmentDateTimeUTC, OwnerId, VisitorId, PetId, LocationId, AppointmentState
-                 FROM Appointments
-                 WHERE Id = @Id";
+                 SELECT a.Id, a.AppointmentDateTimeUTC, a.OwnerId, a.VisitorId, a.PetId, a.LocationId, a.AppointmentState,
+                 o.FirstName AS OwnerFirstName, o.PreferredName AS OwnerPreferredName, v.FirstName AS VisitorFirstName, v.PreferredName AS VisitorPreferredName, p.PetName
+                 FROM Appointments a
+                 LEFT JOIN Users o ON o.ID = a.OwnerId
+                 LEFT JOIN Users v ON v.ID = a.VisitorId
+                 LEFT JOIN Pets p ON p.ID = a.PetId
+                 WHERE a.Id = @Id";
     }
 
     private static string AddAppointmentSqlStatement()
