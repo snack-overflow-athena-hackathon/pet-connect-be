@@ -2,7 +2,7 @@
 
 # Pet Connect by Snack Overflow
 
-**Front End Hosted on [Heroku](https://pet-api-fe.herokuapp.com/snackoverflow)  
+**Front End Hosted on [Heroku](https://pet-api-fe.herokuapp.com)  
 List of All API Endpoints on [Heroku](https://pet-api-athena.herokuapp.com/swagger/index.html)**  
 
 #
