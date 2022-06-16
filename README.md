@@ -26,4 +26,4 @@ This project requires the .NET6 framework.
 ## Snack Overflow
 Snack Overflow are [Jason Clifton](https://github.com/JasonClifton), [Joss Konrad-Lee](https://github.com/jkonradlee), [Linda Güster](https://github.com/xViolaine), [Wrin Langford](https://github.com/WrinLangford) and [Zan Clifton](https://github.com/ZanClifton). 
 
-![Snack Overflow](https://github.com/snack-overflow-athena-hackathon/pet-connect-fe/blob/main/src/images/team.png)
+![Snack Overflow](https://github.com/snack-overflow-athena-hackathon/pet-connect-fe/blob/main/src/images/snackoverflowteamphotos.png)
